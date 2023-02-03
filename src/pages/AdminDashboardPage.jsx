@@ -61,7 +61,7 @@ const AdminDashboardPage = () => {
           </span>
       </div>
 
-      <div className="flex justify-between text-[#FFFFFF] mt-5 opacity-[0.5]">
+      <div className="flex justify-between text-[#FFFFFF] mt-5 mb-[2.4rem] opacity-[0.5]">
         <div className="flex">
           <h4 className="mr-5">#</h4>
           <h4>Title</h4>
@@ -70,16 +70,43 @@ const AdminDashboardPage = () => {
         <h4>Most Liked</h4>    
       </div>
 
-      <div className="flex justify-between  text-[#FFFFFF] mt-5 opacity-[0.5]">
-        <div className="flex items-center w-[30%] ">
-          <h4 className="mr-5">#</h4>
-          <div className="h-[33px] mr-3 w-[60px] rounded-[4px] bg-white"></div>
-          <h4>Rune raises $100,000 for marketing through NFT butterflies sale</h4>
-        </div>
-        <h4 className="w-[29%]">Author</h4>    
-        <h4>Most Liked</h4>    
-      </div>
+      { data.length ?   
+        data.map((card, index) => {
+          return <div className="flex justify-between  text-[#FFFFFF] mt-5 opacity-[0.5]">
+          <div className="flex items-center w-[30%] ">
+            <h4 className="mr-5">#</h4>
+            <div className="h-[33px] mr-3 w-[60px] rounded-[4px] bg-white"></div>
+            <h4>Rune raises $100,000 for marketing through NFT butterflies sale</h4>
+          </div>
+          <h4 className="w-[29%]">Author</h4>    
+          <h4>Most Liked</h4>    
+          </div>
+        })   
+         :
+         <div>
+            <div className="flex justify-between  text-[#FFFFFF] mt-5 opacity-[0.5]">
+            <div className="flex items-center w-[30%] ">
+              <h4 className="mr-5">#</h4>
+              <div className="h-[33px] mr-3 w-[60px] rounded-[4px] bg-white"></div>
+              <h4>Rune raises $100,000 for marketing through NFT butterflies sale</h4>
+            </div>
+            <h4 className="w-[29%]">Author</h4>    
+            <h4>Most Liked</h4>    
+            </div>
 
+            <div className="flex justify-between  text-[#FFFFFF] mt-5 opacity-[0.5]">
+            <div className="flex items-center w-[30%] ">
+              <h4 className="mr-5">#</h4>
+              <div className="h-[33px] mr-3 w-[60px] rounded-[4px] bg-white"></div>
+              <h4>Rune raises $100,000 for marketing through NFT butterflies sale</h4>
+            </div>
+            <h4 className="w-[29%]">Author</h4>    
+            <h4>Most Liked</h4>    
+            </div>
+          
+          </div>
+            
+      }
 
       </div>
     </>
