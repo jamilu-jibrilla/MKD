@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
+import logout from "./logout.png"
+import { AuthContext } from "../authContext";
+import { useNavigate } from "react-router-dom";
+
+
 
 const AdminDashboardPage = () => {
   const [nextPage, setNextpage] = useState (1)
   const [prevPage, setPrevpage] = useState(1)
   const [data, setData] = useState([])
+  const { dispatch } = React.useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(()=> {
     
@@ -28,16 +35,18 @@ const AdminDashboardPage = () => {
     .then(res => setData(res))
 
   }, [])
-  
-  console.log(data)
+  const handleLogout = () => {
+    dispatch({type: "LOGOUT"})
+    navigate("/admin/login")
+  }
   return (
     <>
       <div className="w-full px-[5rem] pt-3  h-screen bg-[#111111]">
 
         <div className="flex items-center justify-between mb-[4rem]">
           <h1 className="text-[3rem] text-white font-bold">App</h1>
-          <button className="text-white text-md">
-            <img src="" alt="logout icon" />
+          <button onClick={handleLogout} className="text-white text-md flex">
+            <img src={logout} alt="logout icon" />
             logout
           </button>
         </div>
@@ -67,7 +76,7 @@ const AdminDashboardPage = () => {
           <div className="h-[33px] mr-3 w-[60px] rounded-[4px] bg-white"></div>
           <h4>Rune raises $100,000 for marketing through NFT butterflies sale</h4>
         </div>
-        <h4 className="w-[30%]">Author</h4>    
+        <h4 className="w-[29%]">Author</h4>    
         <h4>Most Liked</h4>    
       </div>
 
