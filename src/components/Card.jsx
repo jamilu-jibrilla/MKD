@@ -1,6 +1,8 @@
+import { useState } from "react"
 import {useDrag} from "react-dnd"
 
-const Card = ({card}) => {
+const Card = ({card, handleDrag}) => {
+
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "div",
         item: {id: card.id},
@@ -15,6 +17,8 @@ const Card = ({card}) => {
                 opacity: isDragging ? 0.5 : 1,
                 cursor: 'move',
             }}
+            id={card.id}
+            onDragEnter={handleDrag}
                 className=" flex justify-between items-center  text-[#FFFFFF] mt-5 ">
           <div className="flex items-center w-[30%] ">
             <h4 className="mr-5 opacity-[0.7]">#</h4>

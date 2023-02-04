@@ -12,6 +12,13 @@ const AdminDashboardPage = () => {
   const { dispatch } = React.useContext(AuthContext);
   const navigate = useNavigate();
   const [page, setPage] = useState(1) 
+  const [dragId, setDragId] = useState(0)
+  
+  const handleDrag = (e) => {
+    e.stopPropagation()
+    // console.log(e.currentTarget.id)
+    setDragId(e.currentTarget.id)
+  }
   useEffect(() => {
     const result = async () => {
       let sdk = new MkdSDK();
@@ -38,18 +45,21 @@ const AdminDashboardPage = () => {
 
   const [{isOver}, drop] = useDrop(()=> ({
     accept: "div",
-    drop: (item) => addDivToContainer(item.id),
-
-  }))
-  console.log(data)
-  const addDivToContainer = (id) => {
+    drop: (item) => addDivToContainer(item.id, dragId),
+    collect: (monitor) => ({
+      isOver : !!monitor.isOver()
+    })
+  }), [dragId, setDragId])
+  const addDivToContainer = (id, dragNo) => {
     setData((prev) => {
       let arr = [...prev]
       let item = arr.filter(item => item.id === id)
       let items = arr.filter(item => item.id !== id)
       arr = [...items]
-      let newArr = arr.concat(item)
-      return newArr
+      let dropItem = arr.filter(item => item.id == dragNo)
+      const placeAfter = arr.indexOf(dropItem[0])
+      arr.splice(placeAfter, 0, item[0])
+      return arr
     })
   }
 
@@ -91,7 +101,7 @@ const AdminDashboardPage = () => {
       { data.length ? 
         data.map((card, index) => {
           return (
-          <Card card={card} key={card.id}/>
+          <Card handleDrag={handleDrag} card={card} key={card.id}/>
           )
         })  
          :
