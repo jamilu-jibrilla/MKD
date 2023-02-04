@@ -43,10 +43,13 @@ const AdminDashboardPage = () => {
       isOver: !!monitor.isOver()
     })
   }))
-  console.log(data)
   const addDivToContainer = (id) => {
-    const card = data.filter((card) => id === card.id)
-    setData((cards) => cards.filter((card) => id !== card.id).concat(card))
+    let arr = [...data]
+    let spliced = arr.splice(id-1, 1)
+    setData(arr.concat(spliced))
+
+    // const card = data.filter((card) => id === card.id) 
+    // setData((cards) => cards.filter((card) => id !== card.id).concat(card))
   }
 
   const handleLogout = () => {
