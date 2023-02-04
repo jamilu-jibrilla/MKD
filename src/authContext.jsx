@@ -15,11 +15,14 @@ const reducer = (state, action) => {
     case "LOGIN":
       //TODO
       localStorage.setItem("token", action.payload.token)
+      localStorage.setItem("role", action.payload.role)
+      console.log(action.payload)
       return {
         ...state,
         isAuthenticated: true,
         token: action.payload.token,
-        role: action.payload.role
+        role: action.payload.role,
+        user: action.payload.user_id
       };
     case "LOGOUT":
       localStorage.clear();
@@ -51,7 +54,9 @@ const AuthProvider = ({ children }) => {
   React.useEffect(() => {
     //TODO
     let sdk = new MkdSDK();
-    sdk.check()
+  const role = localStorage.getItem("role");
+    let res = sdk.check(role)
+    tokenExpireError(dispatch, res.message)
   }, []);
 
   return (

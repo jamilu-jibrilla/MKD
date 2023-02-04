@@ -3,45 +3,46 @@ import { useEffect } from "react";
 import logout from "./logout.png"
 import { AuthContext } from "../authContext";
 import { useNavigate } from "react-router-dom";
-
+import MkdSDK from "../utils/MkdSDK";
+import Card from "../components/Card"
 
 
 const AdminDashboardPage = () => {
-  const [nextPage, setNextpage] = useState (1)
-  const [prevPage, setPrevpage] = useState(1)
   const [data, setData] = useState([])
   const { dispatch } = React.useContext(AuthContext);
   const navigate = useNavigate();
-
-  useEffect(()=> {
-    
-    const URL = "https://reacttask.mkdlabs.com/v1/api/rest/video/PAGINATE" 
-    const data = {
-      payload: {},
-      page: 1,
-      limit: 10,
+  const [page, setPage] = useState(1) 
+  useEffect(() => {
+    const result = async () => {
+      let sdk = new MkdSDK();
+      sdk.setTable("video")
+      const res = await sdk.callRestAPI({page: page, limit: 10}, "PAGINATE")
+      return await res
     }
-    const requestObj = {
-      method: 'post',
-      headers: {
-      'Content-Type': 'application/json',
-      'x-project': 'cmVhY3R0YXNrOmQ5aGVkeWN5dWjZwN3p3OHhpMzR0OWJtdHNqc2lneTV0Nw==',
-      "Authorization": "Bearer " + localStorage.getItem("token")
-      },
-      body: JSON.stringify(data),
-    }
-    const res = fetch(URL, requestObj)
-    .then(res => res.json())
-    .then(res => setData(res))
+    result().then((res) => {
+      setData(res.list)
+    })
+  }, [page])
+  const handleNext = () => {
+    setPage(prev => {
+      return prev + 1
+    })
+  }
 
-  }, [])
+  const handlePrev = () => {
+    setPage(prev => {
+      if(prev > 1)
+      return prev - 1
+    })
+  }
+
   const handleLogout = () => {
     dispatch({type: "LOGOUT"})
     navigate("/admin/login")
   }
   return (
     <>
-      <div className="w-full px-[5rem] pt-3  h-screen bg-[#111111]">
+      <div className="w-full px-[5rem] pt-3 overflow-y-scroll h-screen bg-[#111111]">
 
         <div className="flex items-center justify-between mb-[4rem]">
           <h1 className="text-[3rem] text-white font-bold">App</h1>
@@ -61,7 +62,7 @@ const AdminDashboardPage = () => {
           </span>
       </div>
 
-      <div className="flex justify-between text-[#FFFFFF] mt-5 mb-[2.4rem] opacity-[0.5]">
+      <div className="flex justify-between text-[#FFFFFF] mt-9 mb-[2.4rem] opacity-[0.5]">
         <div className="flex">
           <h4 className="mr-5">#</h4>
           <h4>Title</h4>
@@ -69,44 +70,26 @@ const AdminDashboardPage = () => {
         <h4>Author</h4>    
         <h4>Most Liked</h4>    
       </div>
-
-      { data.length ?   
+      
+      { data.length ? 
         data.map((card, index) => {
-          return <div className="flex justify-between  text-[#FFFFFF] mt-5 opacity-[0.5]">
-          <div className="flex items-center w-[30%] ">
-            <h4 className="mr-5">#</h4>
-            <div className="h-[33px] mr-3 w-[60px] rounded-[4px] bg-white"></div>
-            <h4>Rune raises $100,000 for marketing through NFT butterflies sale</h4>
-          </div>
-          <h4 className="w-[29%]">Author</h4>    
-          <h4>Most Liked</h4>    
-          </div>
-        })   
+          return (
+          <Card card={card} key={index}/>
+          )
+        })  
          :
-         <div>
-            <div className="flex justify-between  text-[#FFFFFF] mt-5 opacity-[0.5]">
-            <div className="flex items-center w-[30%] ">
-              <h4 className="mr-5">#</h4>
-              <div className="h-[33px] mr-3 w-[60px] rounded-[4px] bg-white"></div>
-              <h4>Rune raises $100,000 for marketing through NFT butterflies sale</h4>
-            </div>
-            <h4 className="w-[29%]">Author</h4>    
-            <h4>Most Liked</h4>    
-            </div>
-
-            <div className="flex justify-between  text-[#FFFFFF] mt-5 opacity-[0.5]">
-            <div className="flex items-center w-[30%] ">
-              <h4 className="mr-5">#</h4>
-              <div className="h-[33px] mr-3 w-[60px] rounded-[4px] bg-white"></div>
-              <h4>Rune raises $100,000 for marketing through NFT butterflies sale</h4>
-            </div>
-            <h4 className="w-[29%]">Author</h4>    
-            <h4>Most Liked</h4>    
-            </div>
-          
-          </div>
-            
+          <div>
+           Loading
+          </div>            
       }
+      <div className="flex justify-center text-md ">
+        <button onClick={handlePrev} className="text-[1.2rem] bg-[white] border border-black px-5 mr-3 bg-gray">prev</button>
+        <button 
+          onClick={handleNext} 
+        className=" bg-[white] text-[1.2rem] border border-black px-5 bg-gray">next</button>
+      </div>
+
+
 
       </div>
     </>

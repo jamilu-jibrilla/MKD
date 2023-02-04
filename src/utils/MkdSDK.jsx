@@ -101,7 +101,7 @@ export default function MkdSDK() {
 
   this.check = async function (role) {
     //TODO
-    const loginURL = "https://reacttask.mkdlabs.com/v2/api/lambda/check" 
+    const URL = "https://reacttask.mkdlabs.com/v2/api/lambda/check" 
     const data = {role: role}
     const requestObj = {
       method: 'POST',
@@ -112,12 +112,8 @@ export default function MkdSDK() {
       },
       body: JSON.stringify(data),
     }
-    const res = await fetch(loginURL, requestObj)
-    try {
-      return res
-    } catch {
-      return "invalid token"
-    }
+    const res = await fetch(URL, requestObj)
+    return await res.json()
   };
 
   return this;
