@@ -39,17 +39,18 @@ const AdminDashboardPage = () => {
   const [{isOver}, drop] = useDrop(()=> ({
     accept: "div",
     drop: (item) => addDivToContainer(item.id),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver()
-    })
-  }))
-  const addDivToContainer = (id) => {
-    let arr = [...data]
-    let spliced = arr.splice(id-1, 1)
-    setData(arr.concat(spliced))
 
-    // const card = data.filter((card) => id === card.id) 
-    // setData((cards) => cards.filter((card) => id !== card.id).concat(card))
+  }))
+  console.log(data)
+  const addDivToContainer = (id) => {
+    setData((prev) => {
+      let arr = [...prev]
+      let item = arr.filter(item => item.id === id)
+      let items = arr.filter(item => item.id !== id)
+      arr = [...items]
+      let newArr = arr.concat(item)
+      return newArr
+    })
   }
 
   const handleLogout = () => {
@@ -99,11 +100,11 @@ const AdminDashboardPage = () => {
           </div>            
       }
       </div>
-      <div className="flex justify-center text-md ">
-        <button onClick={handlePrev} className="text-[1.2rem] bg-[white] border border-black px-5 mr-3 bg-gray">prev</button>
+      <div className="flex justify-center text-md py-8">
+        <button onClick={handlePrev} className="text-[1.2rem] bg-[white] bo w-[150px] rounded-[12px] px-5 mr-[1rem] bg-gray">prev</button>
         <button 
           onClick={handleNext} 
-        className=" bg-[white] text-[1.2rem] border border-black px-5 bg-gray">next</button>
+        className=" bg-[white] text-[1.2rem] w-[150px] rounded-[12px] px-5 bg-gray">next</button>
       </div>
 
 
