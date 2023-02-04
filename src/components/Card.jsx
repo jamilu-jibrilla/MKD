@@ -28,7 +28,7 @@ const Card = ({card, handleDrag}) => {
             </div>
             <h4 className="">{card.title}</h4>
           </div>
-          <h4 className="w-[35%] opacity-[0.5] text-[16px] text-[#DBFD51]">mananight</h4>    
+          <h4 className="w-[33%] opacity-[0.5] text-[16px] text-[#DBFD51]">manaknight</h4>    
           
           <h4 className="flex items-center mr-3">{card.like} <img className="ml-1" src={likes} alt="" /></h4>    
           </div>

@@ -16,7 +16,6 @@ const AdminDashboardPage = () => {
   
   const handleDrag = (e) => {
     e.stopPropagation()
-    // console.log(e.currentTarget.id)
     setDragId(e.currentTarget.id)
   }
   useEffect(() => {
@@ -54,11 +53,20 @@ const AdminDashboardPage = () => {
     setData((prev) => {
       let arr = [...prev]
       let item = arr.filter(item => item.id === id)
+      const itemIndex = arr.indexOf(item[0])
+
       let items = arr.filter(item => item.id !== id)
       arr = [...items]
+      
       let dropItem = arr.filter(item => item.id == dragNo)
-      const placeAfter = arr.indexOf(dropItem[0])
-      arr.splice(placeAfter, 0, item[0])
+      const dropItemIndex = arr.indexOf(dropItem[0])+1
+
+      if(itemIndex < dropItemIndex) {
+        arr.splice(dropItemIndex, 0, item[0])
+      } else {
+        arr.splice(dropItemIndex-1, 0, item[0])
+      }
+
       return arr
     })
   }
@@ -87,8 +95,7 @@ const AdminDashboardPage = () => {
             <span>30 may 2022</span>
             <span className=" ml-2 mb-2 text-[#666666]">.</span>
             <span className="rounded-[5px] bg-[#9BFF00] px-[.1rem] text-[12px] text-black mx-[.7rem]">SUBMISSIONS OPEN</span>
-            <span className=" mr-2 mb-2 text-[#666666]">.</span>
-            
+            <span className=" mr-2 mb-2 text-[#666666]">.</span>            
             <span>11:34</span>
           </span>
       </div>
@@ -101,6 +108,7 @@ const AdminDashboardPage = () => {
         <h4>Author</h4>    
         <h4>Most Liked</h4>    
       </div>
+
       <div ref={drop}>
       { data.length ? 
         data.map((card, index) => {
@@ -109,12 +117,12 @@ const AdminDashboardPage = () => {
           )
         })  
          :
-          <div>
-           Loading
+          <div className="text-center text-white">
+           Loading...
           </div>            
       }
       </div>
-      <div className="flex justify-center text-md py-8">
+      <div className={`${!data.length ? "hidden" : ""} flex justify-center text-md py-8`}>
         <button onClick={handlePrev} className="text-[1.2rem] bg-[white] bo w-[100px] rounded-[12px] px-5 mr-[1rem] bg-gray">prev</button>
         <button 
           onClick={handleNext} 

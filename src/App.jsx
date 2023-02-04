@@ -7,15 +7,15 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 
 function App() {
   return (
-    <AuthProvider>
-      <GlobalProvider>
-        <Router>
-        <DndProvider backend={HTML5Backend}>
-          <Main />
-        </DndProvider>
-        </Router>
-      </GlobalProvider>
-    </AuthProvider>
+    <Router>
+      <AuthProvider>
+        <GlobalProvider>
+          <DndProvider backend={HTML5Backend}>
+            <Main />
+          </DndProvider>
+        </GlobalProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

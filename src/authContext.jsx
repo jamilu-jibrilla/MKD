@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import { useLocation } from "react-router";
 import MkdSDK from "./utils/MkdSDK";
 
 export const AuthContext = React.createContext();
@@ -16,13 +17,11 @@ const reducer = (state, action) => {
       //TODO
       localStorage.setItem("token", action.payload.token)
       localStorage.setItem("role", action.payload.role)
-      console.log(action.payload)
       return {
         ...state,
         isAuthenticated: true,
         token: action.payload.token,
         role: action.payload.role,
-        user: action.payload.user_id
       };
     case "LOGOUT":
       localStorage.clear();
@@ -49,15 +48,17 @@ export const tokenExpireError = (dispatch, errorMessage) => {
 };
 
 const AuthProvider = ({ children }) => {
+  let location = useLocation()
   const [state, dispatch] = useReducer(reducer, initialState);
-
   React.useEffect(() => {
     //TODO
     let sdk = new MkdSDK();
-  const role = localStorage.getItem("role");
+    const role = localStorage.getItem("role");
     let res = sdk.check(role)
-    tokenExpireError(dispatch, res.message)
-  }, []);
+    res.then((res)=> {
+      // tokenExpireError(dispatch, res.message)
+    })
+  }, [location]);
 
   return (
     <AuthContext.Provider

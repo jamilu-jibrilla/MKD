@@ -40,14 +40,19 @@ const AdminLoginPage = () => {
     let sdk = new MkdSDK();
     //TODO    
     const loginData = async () => {
-      const req = await sdk.login(formState.email, formState.password, formState.role)
       try {
-        dispatch({type: "LOGIN", payload: req })
-        let message = "login successfull"
-        showToast(globalContext.dispatch, message)
-        navigate("/admin/dashboard")
+        const req = await sdk.login(formState.email, formState.password, formState.role)
+        if(!req.error) {
+          dispatch({type: "LOGIN", payload: req })
+          let message = "login successfull"
+          showToast(globalContext.dispatch, message)
+          navigate("/admin/dashboard")
+        } else {
+          throw new Error("login failed")
+        }
+
       } catch {
-        let message = "login failed"
+        let message = "incorrect username or password"
         showToast(globalContext.dispatch, message)
       }
     } 
@@ -72,8 +77,7 @@ const AdminLoginPage = () => {
             placeholder="Email"
             value={formState.email}
             name="email"
-            onChange={(e)=> {
-              e.persist()
+            onInput={(e)=> {
               setFormState(prev => {
                 return {...prev, [e.target.name]: e.target.value}
               })
@@ -99,8 +103,7 @@ const AdminLoginPage = () => {
             placeholder="******************"
             name="password"
             value={formState.password}
-            onChange={(e)=> {
-              e.persist()
+            onInput={(e)=> {
               setFormState(prev => {
                 return {...prev, [e.target.name]: e.target.value}
               })
