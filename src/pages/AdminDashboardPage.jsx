@@ -5,7 +5,7 @@ import { AuthContext } from "../authContext";
 import { useNavigate } from "react-router-dom";
 import MkdSDK from "../utils/MkdSDK";
 import Card from "../components/Card"
-
+import { useDrop } from "react-dnd";
 
 const AdminDashboardPage = () => {
   const [data, setData] = useState([])
@@ -34,6 +34,19 @@ const AdminDashboardPage = () => {
       if(prev > 1)
       return prev - 1
     })
+  }
+
+  const [{isOver}, drop] = useDrop(()=> ({
+    accept: "div",
+    drop: (item) => addDivToContainer(item.id),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver()
+    })
+  }))
+  console.log(data)
+  const addDivToContainer = (id) => {
+    const card = data.filter((card) => id === card.id)
+    setData((cards) => cards.filter((card) => id !== card.id).concat(card))
   }
 
   const handleLogout = () => {
@@ -70,11 +83,11 @@ const AdminDashboardPage = () => {
         <h4>Author</h4>    
         <h4>Most Liked</h4>    
       </div>
-      
+      <div ref={drop}>
       { data.length ? 
         data.map((card, index) => {
           return (
-          <Card card={card} key={index}/>
+          <Card card={card} key={card.id}/>
           )
         })  
          :
@@ -82,6 +95,7 @@ const AdminDashboardPage = () => {
            Loading
           </div>            
       }
+      </div>
       <div className="flex justify-center text-md ">
         <button onClick={handlePrev} className="text-[1.2rem] bg-[white] border border-black px-5 mr-3 bg-gray">prev</button>
         <button 
